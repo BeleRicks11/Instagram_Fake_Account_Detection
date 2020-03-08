@@ -10,9 +10,9 @@ from igramscraper.instagram import Instagram
 instagram = Instagram()
 #instagram.set_proxies(proxies)
 
-account_name_list=["neymarjr", "_riccardo.fava_"]
+account_name_list=["neymarjr"]
 
-account = instagram.get_account('neymarjr')
+account = instagram.get_account('hjejendbdnsnshsb')
 print('Account info:')
 print('Id', account.identifier)
 print('Username', account.username)

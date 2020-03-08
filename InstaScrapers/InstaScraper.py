@@ -4,6 +4,9 @@ import os
 import requests
 import json
 import time
+import random
+from igramscraper.instagram import Instagram 
+
 
 """Scrape Instagram Profile"""
 
@@ -22,6 +25,15 @@ def delete_data():
         os.remove("data.csv")
 
 """
+Add the header at the "data.csv" file
+"""
+def add_header():
+	with open('data.csv', mode='w') as csv_file:
+		fieldNames = ['Username','UserID','Full Name','Is Private','Followers','Following','Total Medias','Is Business','last time','Bio','Profile Pic Url', 'External Url','Is Verified']
+		writer = csv.DictWriter(csv_file, fieldnames = fieldNames)
+		writer.writeheader()
+
+"""
 Create the "data.csv" file if not exists and add a row to the dataset, containing the informations about an account.
     x is the name of the file, data is the data to add to the file
 """
@@ -29,7 +41,7 @@ def add(x, data):
     # Open the file in append-mode
 	with open(x, mode = 'a', encoding="utf-8") as csv_file:
 		# Define the columns name
-		fieldNames = ['Username','UserID','Full Name','Is Private','Followers','Following','Total Medias','Is Business','last time','Bio']
+		fieldNames = ['Username','UserID','Full Name','Is Private','Followers','Following','Total Medias','Is Business','last time','Bio','Profile Pic Url', 'External Url','Is Verified']
 		# assign every data properties to the right fieldname
 		writer = csv.DictWriter(csv_file, fieldnames = fieldNames)
         # add a row with the new data to the file
@@ -39,7 +51,7 @@ def add(x, data):
 Read the "users.txt" file and append every username (in a row) to a list
 """
 def addUsername(list):
-    with open('users.txt', mode='r', encoding="utf-8") as csv_file:
+    with open('dataset.csv', mode='r', encoding="utf-8") as csv_file:
         csv_reader = csv.DictReader(csv_file)
         line_count = 0
         for row in csv_reader:
@@ -54,6 +66,7 @@ usernameList = []
 
 delete_data()
 addUsername(usernameList)
+add_header()
 
 print(usernameList)
 
@@ -61,37 +74,68 @@ print(usernameList)
 For every account in the usernameList takes his informations and add it 
     to the data.csv file
 """
+
+instagram = Instagram()
+
 for account in usernameList:
 	details={}
 	u=account.strip()
 	url='https://www.instagram.com/'+u+'/'
 
+	account = instagram.get_account(account)
+	print('\nAccount info:')
+	details['UserID']=account.identifier
+	print('User Id:-\t\t'+details['UserID'])
+
+	details['Username']=account.username
+	print('Username:-\t\t'+details['Username'])
+
+	details['Full Name']=account.full_name
+	print('Full name:-\t\t'+details['Full Name'])
+
+	details['Bio']=account.biography
+	print('Biography:-\t\t'+details['Bio'])
+
+	details['Profile Pic Url']=account.get_profile_picture_url()
+	print('Profile Pic Url:-\t'+details['Profile Pic Url'])
+
+	details['External Url']=account.external_url
+	print('External Url:-\t\t',details['External Url'])
+
+	details['Total Medias']=account.media_count
+	print('Number of posts:-\t',details['Total Medias'])
+
+	details['Followers']=account.followed_by_count
+	print('Number of followers:-\t',details['Followers'])
+
+	details['Following']=account.follows_count
+	print('Number of follows:-\t',details['Following'])
+
+	details['Is Private']=account.is_private
+	print('Is private:-\t\t',details['Is Private'])
+
+	details['Is Verified']=account.is_verified
+	print('Is verified:-\t\t',details['Is Verified'])
+
+	time.sleep(10)
+
 	r=requests.get(url)
 	body=r.text.split('window._sharedData = ')[1].split(';</script>')[0]
 	data=json.loads(body)
 	user=data['entry_data']['ProfilePage'][0]['graphql']['user']
-	print('\t\t===BIO===\n'+user['biography']+'\n\t\t=========')
-	details['Bio']=user['biography']
-	print('Username :-\t\t'+user['username'])
-	details['Username']=user['username']
-	print('User Id :-\t\t'+user['id'])
-	details['UserID']=user['id']
-	print('Full Name:-\t\t'+user['full_name'])
-	details['Full Name']=user['full_name']
-	print('Is Private:-\t\t'+str(user['is_private']))
-	details['Is Private']=user['is_private']
-	print('Follower Count :-\t'+str(user['edge_followed_by']['count']))
-	details['Followers']=str(user['edge_followed_by']['count'])
-	print('Following Count:-\t'+str(user['edge_follow']['count']))
-	details['Following']=str(user['edge_follow']['count'])
-	print('Media Count:-\t\t'+str(user['edge_owner_to_timeline_media']['count']))
-	details['Total Medias']=str(user['edge_owner_to_timeline_media']['count'])
-	print('is Business Account:-\t'+str(user['is_business_account']))
+	print('Is Business Account:-\t'+str(user['is_business_account']))
 	details['Is Business']=str(user['is_business_account'])
 	if not details['Is Private']:
-		timestamp = int(user['edge_owner_to_timeline_media']['edges'][0]['node']['taken_at_timestamp'])
-		details['last time']=get_time(timestamp)
-		print('Last Post Time:-\t'+details['last time'])
+		if details['Total Medias'] == '0':
+			details['last time']="Null"
+			print('Last Post Time:-\t',details['last time'])
+		else :
+			timestamp = int(user['edge_owner_to_timeline_media']['edges'][0]['node']['taken_at_timestamp'])
+			details['last time']=get_time(timestamp)
+			print('Last Post Time:-\t',details['last time'])
+	else:
+		details['last time']="Null"
+		print('Last Post Time:-\t',details['last time'])
 	add('data.csv',details)
-	time.sleep(5)
+	time.sleep(random.randrange(25,35))
 print('Result saved as data.csv')
