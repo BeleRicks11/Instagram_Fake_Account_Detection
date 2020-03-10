@@ -5,7 +5,10 @@ import requests
 import json
 import time
 import random
-from igramscraper.instagram import Instagram 
+from datetime import datetime
+import datetime
+from datetime import timedelta
+from igramscraper.instagram import Instagram
 
 
 """Scrape Instagram Profile"""
@@ -14,7 +17,7 @@ from igramscraper.instagram import Instagram
 Get the local time in day, day_number month year hour minute seconds format
 """
 def get_time(epoch):
-	a=time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(epoch))
+	a=time.strftime('%m/%d/%y %H:%M:%S', time.localtime(epoch))
 	return a
 
 """
@@ -31,7 +34,7 @@ Add the header at the "data.csv" file
 """
 def add_header():
 	with open('data.csv', mode='w') as csv_file:
-		fieldNames = ['Username','UserID','Full Name','Is Private','Followers','Following','Total Medias','Is Business','last time','Bio','Profile Pic Url', 'External Url','Is Verified']
+		fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Nums/Length Fullname','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following','Last Post Recent']
 		writer = csv.DictWriter(csv_file, fieldnames = fieldNames)
 		writer.writeheader()
 
@@ -43,7 +46,7 @@ def add(x, data):
 	# Open the file in append-mode
 	with open(x, mode = 'a', encoding="utf-8") as csv_file:
 		# Define the columns name
-		fieldNames = ['Username','UserID','Full Name','Is Private','Followers','Following','Total Medias','Is Business','last time','Bio','Profile Pic Url', 'External Url','Is Verified']
+		fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Nums/Length Fullname','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following','Last Post Recent']
 		# assign every data properties to the right fieldname
 		writer = csv.DictWriter(csv_file, fieldnames = fieldNames)
 		# add a row with the new data to the file
@@ -88,7 +91,7 @@ def addFake(x, data):
 """
 Read the "dataset.txt" file and write the username of the fake accounts in a .txt file
 """
-def readFakes():	
+def readFakes():
 	with open('dataset.csv', mode='r', encoding="utf-8") as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		line_count = 0
@@ -115,7 +118,7 @@ readFakes()
 print(usernameList)
 
 """
-For every account in the usernameList takes his informations and add it 
+For every account in the usernameList takes his informations and add it
 	to the data.csv file
 """
 
@@ -125,62 +128,101 @@ for account in usernameList:
 	details={}
 	u=account.strip()
 	url='https://www.instagram.com/'+u+'/'
-
 	account = instagram.get_account(account)
+
 	print('\nAccount info:')
-	details['UserID']=account.identifier
-	print('User Id:-\t\t'+details['UserID'])
 
-	details['Username']=account.username
-	print('Username:-\t\t'+details['Username'])
+	picUrl=account.get_profile_picture_url()
+	if "44884218_345707102882519_2446069589734326272_n.jpg" in picUrl:
+		details['Profile Pic']='0'
+	else:
+		details['Profile Pic']='1'
+	print('Has Profile Pic:-\t',details['Profile Pic'])
 
-	details['Full Name']=account.full_name
-	print('Full name:-\t\t'+details['Full Name'])
+	count=0
+	for char in str(account.username):
+		if char.isnumeric()==True:
+			count=count+1
+	if len(account.username)==0 or count==0:
+		result=0
+	else:
+		result=count/len(account.username)
+	details['Nums/Length Username']=str(round(result,3))
+	print('Nums/Length Username:-\t',details['Nums/Length Username'])
 
-	details['Bio']=account.biography
-	print('Biography:-\t\t'+details['Bio'])
+	# using split() to count words in string
+	result = len(account.full_name.split())
+	details['Full Name Words']=str(result)
+	print('Full Name Words:-\t',details['Full Name Words'])
 
-	details['Profile Pic Url']=account.get_profile_picture_url()
-	print('Profile Pic Url:-\t'+details['Profile Pic Url'])
+	count=0
+	for char in str(account.full_name):
+		if char.isnumeric()==True:
+			count=count+1
+	if len(account.full_name)==0 or count==0:
+		result=0
+	else:
+		result=count/len(account.full_name)
+	details['Nums/Length Fullname']=str(round(result,3))
+	print('Nums/Length Fullname:-\t',details['Nums/Length Fullname'])
 
-	details['External Url']=account.external_url
+	details['Bio Length']=str(len(account.biography))
+	print('Bio lenght:-\t\t',details['Bio Length'])
+
+	if account.external_url=='':
+		details['External Url']='0'
+	else:
+		details['External Url']='1'
 	print('External Url:-\t\t',details['External Url'])
 
-	details['Total Medias']=account.media_count
-	print('Number of posts:-\t',details['Total Medias'])
+	if account.is_private==False:
+		details['Private']='0'
+	else:
+		details['Private']='1'
+	print('Is private:-\t\t',details['Private'])
 
-	details['Followers']=account.followed_by_count
-	print('Number of followers:-\t',details['Followers'])
+	if account.is_verified==False:
+		details['Verified']='0'
+	else:
+		details['Verified']='1'
+	print('Is verified:-\t\t',details['Verified'])
 
-	details['Following']=account.follows_count
-	print('Number of follows:-\t',details['Following'])
+	details['#Posts']=str(account.media_count)
+	print('Number of posts:-\t',details['#Posts'])
 
-	details['Is Private']=account.is_private
-	print('Is private:-\t\t',details['Is Private'])
+	details['#Followers']=str(account.followed_by_count)
+	print('Number of followers:-\t',details['#Followers'])
 
-	details['Is Verified']=account.is_verified
-	print('Is verified:-\t\t',details['Is Verified'])
+	details['#Following']=str(account.follows_count)
+	print('Number of follows:-\t',details['#Following'])
 
-	time.sleep(10)
+	time.sleep(random.randrange(25,35))
 
 	r=requests.get(url)
 	body=r.text.split('window._sharedData = ')[1].split(';</script>')[0]
 	data=json.loads(body)
 	user=data['entry_data']['ProfilePage'][0]['graphql']['user']
-	print('Is Business Account:-\t'+str(user['is_business_account']))
-	details['Is Business']=str(user['is_business_account'])
-	if not details['Is Private']:
-		if details['Total Medias'] == '0':
-			details['last time']="Null"
-			print('Last Post Time:-\t',details['last time'])
+
+	if user['is_business_account']==False:
+		details['Business']='0'
+	else:
+		details['Business']='1'
+	print('Is Business:-\t\t',details['Business'])
+
+	if details['Private']=='0':
+		if details['#Posts'] == '0':
+			details['Last Post Recent']='Null'
+			print('Is Last Post Recent:-\t',details['Last Post Recent'])
 		else :
 			timestamp = int(user['edge_owner_to_timeline_media']['edges'][0]['node']['taken_at_timestamp'])
-			details['last time']=get_time(timestamp)
-			print('Last Post Time:-\t',details['last time'])
+			if datetime.datetime.today() - datetime.datetime.strptime(get_time(timestamp), '%m/%d/%y %H:%M:%S') < timedelta(days=90):
+				details['Last Post Recent']='1'
+			else:
+				details['Last Post Recent']='0'
+			print('Is Last Post Recent:-\t',details['Last Post Recent'])
 	else:
-		details['last time']="Null"
-		print('Last Post Time:-\t',details['last time'])
-
+		details['Last Post Recent']='Null'
+		print('Is Last Post Recent:-\t',details['Last Post Recent'])
 	add('data.csv',details)
 	time.sleep(random.randrange(25,35))
 print('Result saved as data.csv')

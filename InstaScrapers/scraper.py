@@ -12,7 +12,7 @@ instagram = Instagram()
 
 account_name_list=["neymarjr"]
 
-account = instagram.get_account('hjejendbdnsnshsb')
+account = instagram.get_account('neymarjr')
 print('Account info:')
 print('Id', account.identifier)
 print('Username', account.username)
