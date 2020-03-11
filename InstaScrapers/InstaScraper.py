@@ -33,7 +33,7 @@ Add the header at the "OfficialDataSet.csv" file
 def add_header():
 	with open('OfficialDataSet.csv', mode='w') as csv_file:
 		fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Nums/Length Fullname','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following','Last Post Recent']
-		writer = csv.DictWriter(csv_file, fieldnames = fieldNames)
+		writer = csv.DictWriter(csv_file, fieldnames = fieldNames, lineterminator='\n')
 		writer.writeheader()
 
 """
@@ -46,7 +46,7 @@ def add(x, data):
 		# Define the columns name
 		fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Nums/Length Fullname','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following','Last Post Recent']
 		# assign every data properties to the right fieldname
-		writer = csv.DictWriter(csv_file, fieldnames = fieldNames)
+		writer = csv.DictWriter(csv_file, fieldnames = fieldNames, lineterminator='\n')
 		# add a row with the new data to the file
 		writer.writerow(data)
 
