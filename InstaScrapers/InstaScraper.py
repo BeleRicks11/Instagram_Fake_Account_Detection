@@ -21,23 +21,23 @@ def get_time(epoch):
 	return a
 
 """
-Delete "data.csv" file if exists
+Delete 'OfficialDataSet.csv' file if exists
 """
 def delete_data():
-	if os.path.exists("data.csv"):
-		os.remove("data.csv")
+	if os.path.exists("OfficialDataSet.csv"):
+		os.remove("OfficialDataSet.csv")
 
 """
-Add the header at the "data.csv" file
+Add the header at the "OfficialDataSet.csv" file
 """
 def add_header():
-	with open('data.csv', mode='w') as csv_file:
+	with open('OfficialDataSet.csv', mode='w') as csv_file:
 		fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Nums/Length Fullname','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following','Last Post Recent']
 		writer = csv.DictWriter(csv_file, fieldnames = fieldNames)
 		writer.writeheader()
 
 """
-Create the "data.csv" file if not exists and add a row to the dataset, containing the informations about an account.
+Create the "'OfficialDataSet.csv' file if not exists and add a row to the dataset, containing the informations about an account.
 	x is the name of the file, data is the data to add to the file
 """
 def add(x, data):
@@ -75,7 +75,7 @@ print(usernameList)
 
 """
 For every account in the usernameList takes his informations and add it
-	to the data.csv file
+	to the OfficialDataSet.csv file
 """
 
 instagram = Instagram()
@@ -171,7 +171,7 @@ for account in usernameList:
 			print('Is Last Post Recent:-\t',details['Last Post Recent'])
 		else :
 			timestamp = int(user['edge_owner_to_timeline_media']['edges'][0]['node']['taken_at_timestamp'])
-			if datetime.datetime.today() - datetime.datetime.strptime(get_time(timestamp), '%m/%d/%y %H:%M:%S') < timedelta(days=90):
+			if datetime.datetime.today() - datetime.datetime.strptime(get_time(timestamp), '%m/%d/%y %H:%M:%S') < timedelta(days=180):
 				details['Last Post Recent']='1'
 			else:
 				details['Last Post Recent']='0'
@@ -179,6 +179,6 @@ for account in usernameList:
 	else:
 		details['Last Post Recent']='Null'
 		print('Is Last Post Recent:-\t',details['Last Post Recent'])
-	add('data.csv',details)
+	add('OfficialDataSet.csv',details)
 	time.sleep(random.randrange(25,35))
-print('Result saved as data.csv')
+print('Result saved as OfficialDataSet.csv')
