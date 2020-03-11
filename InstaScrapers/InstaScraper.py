@@ -26,8 +26,6 @@ Delete "data.csv" file if exists
 def delete_data():
 	if os.path.exists("data.csv"):
 		os.remove("data.csv")
-	if os.path.exists("fake_users.txt"):
-		os.remove("fake_users.txt")
 
 """
 Add the header at the "data.csv" file
@@ -56,34 +54,13 @@ def add(x, data):
 Read the "users.txt" file and append every username (in a row) to a list
 """
 def addUsername(list):
-	with open('dataset.csv', mode='r', encoding="utf-8") as csv_file:
+	with open('users.txt', mode='r', encoding="utf-8") as csv_file:
 		csv_reader = csv.DictReader(csv_file)
 		line_count = 0
 		for row in csv_reader:
-			list.append(f'{row["username"]}')
+			list.append(f'{row["Username"]}')
 			line_count += 1
-
 		print(f'Processed {line_count} lines.')
-
-"""
-Read the "dataset.txt" file and write the username of the fake accounts in a .txt file
-"""
-def readFakes():
-	# Take the fake users from "dataset.csv" and insert them in a list
-	with open('dataset.csv', mode='r', encoding="utf-8") as csv_file:
-		csv_reader = csv.DictReader(csv_file)
-		line_count = 0
-		users = []
-		for row in csv_reader:
-			if(row["fake"] == '1'):
-				users.append(row["username"].strip())
-				line_count += 1
-		print(f'Found {line_count} fake accounts and added to the fakes.txt.')
-	# Insert the item of the users list in a .txt file
-	with open('fake_users.txt', 'w') as f:
-		f.write("Username\n")
-		for item in users:
-			f.write("%s\n" % item)
 
 """
 Define a new empty list which will contains the accounts username
@@ -93,8 +70,6 @@ usernameList = []
 delete_data()
 addUsername(usernameList)
 add_header()
-
-readFakes()
 
 print(usernameList)
 
