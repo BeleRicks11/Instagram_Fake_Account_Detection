@@ -182,7 +182,7 @@ for account in usernameList:
         details['Last Post Recent']='Null'
         print('Is Last Post Recent:-\t',details['Last Post Recent'])
 
-    if (counter <= 277):
+    if (counter <= 276):
         details['Fake'] = '0'
     else:
         details['Fake'] = '1'
