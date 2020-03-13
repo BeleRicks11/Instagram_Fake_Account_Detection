@@ -121,13 +121,13 @@ for account in usernameList:
         result=0
     else:
         result=count/len(account.full_name)
-    details['Nums/Length Fullname']=str(round(result,3))
+    details['Nums/Length Fullname']=str(round(result,4))
     print('Nums/Length Fullname:-\t',details['Nums/Length Fullname'])
 
     details['Bio Length']=str(len(account.biography))
     print('Bio lenght:-\t\t',details['Bio Length'])
-
-    if account.external_url=='':
+ 
+    if account.external_url==None:
         details['External Url']='0'
     else:
         details['External Url']='1'
@@ -154,7 +154,7 @@ for account in usernameList:
     details['#Following']=str(account.follows_count)
     print('Number of follows:-\t',details['#Following'])
 
-    time.sleep(random.randrange(25,35))
+    time.sleep(random.randrange(10,15))
 
     r=requests.get(url)
     body=r.text.split('window._sharedData = ')[1].split(';</script>')[0]
@@ -182,7 +182,7 @@ for account in usernameList:
         details['Last Post Recent']='Null'
         print('Is Last Post Recent:-\t',details['Last Post Recent'])
 
-    if (counter <= 276):
+    if (counter <= 600):
         details['Fake'] = '0'
     else:
         details['Fake'] = '1'
@@ -191,6 +191,6 @@ for account in usernameList:
     counter += 1
 
     add('OfficialDataSet.csv',details)
-    time.sleep(random.randrange(25,35))
+    time.sleep(random.randrange(10,15))
 
 print('Result saved as OfficialDataSet.csv')
