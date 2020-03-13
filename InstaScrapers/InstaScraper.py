@@ -182,10 +182,7 @@ for account in usernameList:
         details['Last Post Recent']='Null'
         print('Is Last Post Recent:-\t',details['Last Post Recent'])
 
-    if (counter <= 600):
-        details['Fake'] = '0'
-    else:
-        details['Fake'] = '1'
+    details['Fake'] = '1'
     print('Is Fake:-\t\t', details['Fake'])
 
     counter += 1
