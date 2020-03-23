@@ -5,7 +5,7 @@ from csv import reader
 counter=0
 # Open the input_file in read mode and output_file in write mode
 with open('DataSet2.csv', 'r') as read_obj: 
-    with open('DataSet.csv', 'w', newline='') as write_obj:
+    with open('DataSet3.csv', 'w', newline='') as write_obj:
     # Create a csv.reader object from the input file object
         csv_reader = reader(read_obj)
         # Create a csv.writer object from the output file object
