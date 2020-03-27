@@ -32,7 +32,7 @@ Add the header at the "NewDataSet.csv" file
 """
 def add_header():
     with open('NewDataSet.csv', mode='w') as csv_file:
-        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', 'Days with Multiple Posts', 'Index of Activity', 'Fake']
+        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', '%Post Single Day', 'Index of Activity', 'Average of Likes', 'Fake']
         writer = csv.DictWriter(csv_file, fieldnames = fieldNames, lineterminator='\n')
         writer.writeheader()
 
@@ -44,7 +44,7 @@ def add(x, data):
     # Open the file in append-mode
     with open(x, mode = 'a', encoding="utf-8") as csv_file:
         # Define the columns name
-        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', 'Days with Multiple Posts', 'Index of Activity', 'Fake']
+        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', '%Post Single Day', 'Index of Activity', 'Average of Likes', 'Fake']
         # assign every data properties to the right fieldname
         writer = csv.DictWriter(csv_file, fieldnames = fieldNames, lineterminator='\n')
         # add a row with the new data to the file
@@ -96,10 +96,10 @@ def check_date(media):
 """
 Define a new empty list which will contains the accounts username
 """
-usernameList = []
+usernameList = ['_bettingram_']
 
 delete_data()
-addUsername(usernameList)
+#addUsername(usernameList)
 add_header()
 
 print(usernameList)
@@ -197,25 +197,25 @@ for account in usernameList:
     time.sleep(random.randrange(10,15))
     medias = instagram.get_medias(account.username, 100)
 
-    #Days with more than one post
+    #Percentage of posts in a single day(Day with the max of post) on the total of posts
     if details['#Posts'] == '0':
-        details['Days with Multiple Posts']='0'
-        print('Days with Multiple Posts:-\t',details['Days with Multiple Posts'])
+        details['%Post Single Day']='0'
+        print('%Post Single Day:-\t',details['%Post Single Day'])
     else:
-        days=0
-        post=0
+        max=0
+        post=1
         i=0
         while i<len(medias):
             for x in range(i+1,len(medias)):
                 if time.strftime('%m/%d/%y', time.localtime(medias[i].created_time)) == time.strftime('%m/%d/%y', time.localtime(medias[x].created_time)):
                     post+=1
-            if post!=0:
-                i+=post
-                days+=1
-            i+=1
-            post=0
-        details['Days with Multiple Posts']=str(days)
-        print('Days with Multiple Posts:'+ details['Days with Multiple Posts'])
+            if post>max:
+                max=post
+            i+=post
+            post=1
+        percentage=(max*100)/len(medias)
+        details['%Post Single Day']=str(round(percentage,3))
+        print('%Post Single Day:-\t',details['%Post Single Day'])
     
     #Index of activity of the last year
     if details['#Posts'] == '0':
@@ -229,8 +229,20 @@ for account in usernameList:
         for i in month:
             total+=i
         average=total/12
-        details['Index of Activity']=str(average)
+        details['Index of Activity']=str(round(average,3))
         print('Index of Activity:-\t',details['Index of Activity'])
+
+    #Average of likes
+    if details['#Posts'] == '0':
+        details['Average of Likes']='0'
+        print('Average of Likes:-\t',details['Average of Likes'])
+    else:
+        total_likes=0
+        for media in medias:
+            total_likes+=media.likes_count
+        average_likes=total_likes/len(medias)        
+        details['Average of Likes']=str(round(average_likes,3))
+        print('Average of Likes:-\t',details['Average of Likes'])
 
     details['Fake'] = '1'
     print('Is Fake:-\t\t', details['Fake'])

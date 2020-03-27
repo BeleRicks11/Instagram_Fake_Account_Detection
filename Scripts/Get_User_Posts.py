@@ -7,28 +7,31 @@ import datetime
 
 instagram = Instagram()
 
-medias = instagram.get_medias("_riccardo.fava_", 100)
-days=0
-post=0
+number_of_posts = 100
+
+medias = instagram.get_medias("_bettingram_", number_of_posts)
+#Percentuale di post effettuati in un giorno sul totale dei post effettuati
+max=0
+post=1
 i=0
 while i<len(medias):
     for x in range(i+1,len(medias)):
         if time.strftime('%m/%d/%y', time.localtime(medias[i].created_time)) == time.strftime('%m/%d/%y', time.localtime(medias[x].created_time)):
             post+=1
-    if post!=0:
-        i+=post
-        days+=1
-    i+=1
-    post=0
-print(days)
+    if post>max:
+        max=post
+    i+=post
+    post=1
+percent=(max*100)/len(medias)
+print("Percentuale:",percent)
 
+
+#indice di attività mensile tra i post dell'ultimo anno
 def get_time(epoch):
     a=time.strftime('%m/%d/%y', time.localtime(epoch))
     return a
 
-
 month=[0,0,0,0,0,0,0,0,0,0,0,0]
-
 def check_date(media):
     date_to_check = datetime.datetime.strptime(get_time(media.created_time), '%m/%d/%y')
     if datetime.datetime.today() - date_to_check < timedelta(days=30):
@@ -63,5 +66,13 @@ total=0
 for i in month:
     total+=i
 average=total/12
-print(month)
-print(average)
+print("Post nei vari mesi:",month)
+print("Indice di attività:",average)
+
+#media mippi 
+total_mippi=0
+for media in medias:
+    total_mippi+=media.likes_count
+average_mippi=total_mippi/len(medias)
+print("Media mippi:",average_mippi)
+    
