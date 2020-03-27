@@ -113,6 +113,10 @@ venv.bak/
 # Visual Studio Code
 .vscode/
 
+# Token & Key
+TOKEN/
+ServiceAccountToken.json
+
 # Spyder project settings
 .spyderproject
 .spyproject
