@@ -66,37 +66,45 @@ def addUsername(list):
 """
 Take a media and check if his date of pubblication is in the last year and in which month
 """
-def check_date(media):
-    date_to_check = datetime.datetime.strptime(get_time(media.created_time), '%m/%d/%y')
-    if datetime.datetime.today() - date_to_check < timedelta(days=30):
-        month[0]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=60):
-        month[1]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=90):
-        month[2]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=120):
-        month[3]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=150):
-        month[4]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=180):
-        month[5]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=210):
-        month[6]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=240):
-        month[7]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=270):
-        month[8]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=300):
-        month[9]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=330):
-        month[10]+= 1
-    elif datetime.datetime.today() - date_to_check < timedelta(days=360):
-        month[11]+= 1
+def check_date(medias):
+    month=[0,0,0,0,0,0,0,0,0,0,0,0]
+    for media in medias:
+        date_to_check = datetime.datetime.strptime(get_time(media.created_time), '%m/%d/%y')
+        if datetime.datetime.today() - date_to_check < timedelta(days=30):
+            month[0]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=60):
+            month[1]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=90):
+            month[2]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=120):
+            month[3]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=150):
+            month[4]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=180):
+            month[5]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=210):
+            month[6]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=240):
+            month[7]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=270):
+            month[8]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=300):
+            month[9]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=330):
+            month[10]+= 1
+        elif datetime.datetime.today() - date_to_check < timedelta(days=360):
+            month[11]+= 1
+    
+    totalPosts = 0
+    for i in month:
+        totalPosts += i
+
+    return totalPosts / 12
 
 """
 Define a new empty list which will contains the accounts username
 """
-usernameList = ['_bettingram_']
+usernameList = ['_bettingram_', 'danielepelleg', 'chiaraferragni']
 
 delete_data()
 #addUsername(usernameList)
@@ -222,14 +230,7 @@ for account in usernameList:
         details['Index of Activity']='0'
         print('Index of Activity:-\t',details['Index of Activity'])
     else:
-        month=[0,0,0,0,0,0,0,0,0,0,0,0]
-        for media in medias:
-            check_date(media)
-        total=0
-        for i in month:
-            total+=i
-        average=total/12
-        details['Index of Activity']=str(round(average,3))
+        details['Index of Activity']=str(round(check_date(medias),3))
         print('Index of Activity:-\t',details['Index of Activity'])
 
     #Average of likes
