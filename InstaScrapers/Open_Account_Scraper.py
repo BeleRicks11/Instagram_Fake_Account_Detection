@@ -68,43 +68,38 @@ Take a media and check if his date of pubblication is in the last year and in wh
 """
 def check_date(medias):
     month=[0,0,0,0,0,0,0,0,0,0,0,0]
+    number_of_month=0
+    date_list=[]
     for media in medias:
         date_to_check = datetime.datetime.strptime(get_time(media.created_time), '%m/%d/%y')
-        if datetime.datetime.today() - date_to_check < timedelta(days=30):
-            month[0]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=60):
-            month[1]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=90):
-            month[2]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=120):
-            month[3]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=150):
-            month[4]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=180):
-            month[5]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=210):
-            month[6]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=240):
-            month[7]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=270):
-            month[8]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=300):
-            month[9]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=330):
-            month[10]+= 1
-        elif datetime.datetime.today() - date_to_check < timedelta(days=360):
-            month[11]+= 1
-    
+        if datetime.datetime.today() - date_to_check < timedelta(days=360):
+            date_list.append(date_to_check)
+
+    for date in date_list:
+        last_post_date = date_list[len(date_list)-1]
+        days=30
+        counter=0
+        while days<=360:
+            if datetime.datetime.today() - date < timedelta(days=days):
+                month[counter]+= 1
+                if date == last_post_date:
+                    number_of_month=counter+1
+                break
+            counter+=1
+            days+=30
     totalPosts = 0
+    print(month)
     for i in month:
         totalPosts += i
-
-    return totalPosts / 12
+    if len(date_list)==0:
+        return 0
+    else:
+        return totalPosts / number_of_month
 
 """
 Define a new empty list which will contains the accounts username
 """
-usernameList = ['_bettingram_', 'danielepelleg', 'chiaraferragni']
+usernameList = ['riya_12335', '__cinnamonvibes', 'danielepelleg']
 
 delete_data()
 #addUsername(usernameList)
