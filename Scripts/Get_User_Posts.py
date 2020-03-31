@@ -2,6 +2,7 @@ from igramscraper.instagram import Instagram
 import time
 from datetime import timedelta
 import datetime
+import random
 
 # If account is public you can query Instagram without auth
 
@@ -9,7 +10,7 @@ instagram = Instagram()
 
 number_of_posts = 100
 
-medias = instagram.get_medias("_bettingram_", number_of_posts)
+medias = instagram.get_medias("riya_12335", number_of_posts)
 #Percentuale di post effettuati in un giorno sul totale dei post effettuati
 max=0
 post=1
@@ -75,4 +76,14 @@ for media in medias:
     total_mippi+=media.likes_count
 average_mippi=total_mippi/len(medias)
 print("Media mippi:",average_mippi)
-    
+
+
+#media mippi 
+total_comments=0
+for media in medias:
+    comments = instagram.get_media_comments_by_id(media.identifier, 10000)
+    total_comments+=len(comments['comments'])
+    time.sleep(random.randrange(5,10))
+average_comments=total_comments/len(medias)
+print("Media commenti:",average_comments)  
+

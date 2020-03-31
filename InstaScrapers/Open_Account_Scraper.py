@@ -32,7 +32,7 @@ Add the header at the "NewDataSet.csv" file
 """
 def add_header():
     with open('NewDataSet.csv', mode='w') as csv_file:
-        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', '%Post Single Day', 'Index of Activity', 'Average of Likes', 'Fake']
+        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', '%Post Single Day', 'Index of Activity', 'Average of Likes', 'Average of Comments', 'Fake','Profile Pic Url']
         writer = csv.DictWriter(csv_file, fieldnames = fieldNames, lineterminator='\n')
         writer.writeheader()
 
@@ -44,7 +44,7 @@ def add(x, data):
     # Open the file in append-mode
     with open(x, mode = 'a', encoding="utf-8") as csv_file:
         # Define the columns name
-        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', '%Post Single Day', 'Index of Activity', 'Average of Likes', 'Fake']
+        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', '%Post Single Day', 'Index of Activity', 'Average of Likes', 'Average of Comments', 'Fake','Profile Pic Url']
         # assign every data properties to the right fieldname
         writer = csv.DictWriter(csv_file, fieldnames = fieldNames, lineterminator='\n')
         # add a row with the new data to the file
@@ -99,10 +99,10 @@ def check_date(medias):
 """
 Define a new empty list which will contains the accounts username
 """
-usernameList = ['riya_12335', '__cinnamonvibes', 'danielepelleg']
+usernameList = []
 
 delete_data()
-#addUsername(usernameList)
+addUsername(usernameList)
 add_header()
 
 print(usernameList)
@@ -239,11 +239,29 @@ for account in usernameList:
         average_likes=total_likes/len(medias)        
         details['Average of Likes']=str(round(average_likes,3))
         print('Average of Likes:-\t',details['Average of Likes'])
-
+ 
+    #Average of comments
+    if details['#Posts'] == '0':
+        details['Average of Comments']='0'
+        print('Average of Comments:-\t',details['Average of Comments'])
+    else:
+        total_comments=0
+        for media in medias:
+            comments = instagram.get_media_comments_by_id(str(media.identifier), 10000)
+            total_comments+=len(comments['comments'])
+            time.sleep(random.randrange(3,8))
+        average_comments=total_comments/len(medias)        
+        details['Average of Comments']=str(round(average_comments,3))
+        print('Average of Comments:-\t',details['Average of Comments'])
+    
     details['Fake'] = '1'
     print('Is Fake:-\t\t', details['Fake'])
 
     counter += 1
+
+    #Profile Pic Url
+    details['Profile Pic Url']=str(account.get_profile_picture_url)
+    print('Profile Pic Url:-\t\t',details['Profile Pic Url'])
 
     add('NewDataSet.csv',details)
     time.sleep(random.randrange(10,15))
