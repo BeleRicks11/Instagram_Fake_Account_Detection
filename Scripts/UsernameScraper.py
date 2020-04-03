@@ -7,7 +7,7 @@ instagram.login(force=False,two_step_verificator=True)
 
 sleep(20) # Delay to mimic user
 
-username = 'pewdiepie'
+username = 'albertonobili'
 followings = []
 account = instagram.get_account(username)
 sleep(1)

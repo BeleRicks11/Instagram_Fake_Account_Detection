@@ -1,8 +1,8 @@
 import csv
 
-input_file = 'DataSet3.csv'
-output_file = 'DataSet4.csv'
-cols_to_remove = [9,10] # Column indexes to be removed (starts at 0)
+input_file = '/home/belericks7/Scaricati/OfficialDataSet.csv'
+output_file = '/home/belericks7/Scaricati/OfficialDataSet1.csv'
+cols_to_remove = [3,12] # Column indexes to be removed (starts at 0)
 
 cols_to_remove = sorted(cols_to_remove, reverse=True) # Reverse so we remove from the end first
 row_count = 0 # Current amount of rows processed

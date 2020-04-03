@@ -32,7 +32,7 @@ Add the header at the "OfficialDataSet.csv" file
 """
 def add_header():
     with open('OfficialDataSet.csv', mode='w') as csv_file:
-        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Nums/Length Fullname','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', 'Fake']
+        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following', 'Fake']
         writer = csv.DictWriter(csv_file, fieldnames = fieldNames, lineterminator='\n')
         writer.writeheader()
 
@@ -44,7 +44,7 @@ def add(x, data):
     # Open the file in append-mode
     with open(x, mode = 'a', encoding="utf-8") as csv_file:
         # Define the columns name
-        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Nums/Length Fullname','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following','Last Post Recent', 'Fake']
+        fieldNames = ['Profile Pic','Nums/Length Username','Full Name Words','Bio Length','External Url','Private','Verified','Business','#Posts','#Followers','#Following', 'Fake']
         # assign every data properties to the right fieldname
         writer = csv.DictWriter(csv_file, fieldnames = fieldNames, lineterminator='\n')
         # add a row with the new data to the file
@@ -113,17 +113,6 @@ for account in usernameList:
     details['Full Name Words']=str(result)
     print('Full Name Words:-\t',details['Full Name Words'])
 
-    count=0
-    for char in str(account.full_name):
-        if char.isnumeric()==True:
-            count=count+1
-    if len(account.full_name)==0 or count==0:
-        result=0
-    else:
-        result=count/len(account.full_name)
-    details['Nums/Length Fullname']=str(round(result,4))
-    print('Nums/Length Fullname:-\t',details['Nums/Length Fullname'])
-
     details['Bio Length']=str(len(account.biography))
     print('Bio lenght:-\t\t',details['Bio Length'])
  
@@ -166,21 +155,6 @@ for account in usernameList:
     else:
         details['Business']='1'
     print('Is Business:-\t\t',details['Business'])
-
-    if details['Private']=='0':
-        if details['#Posts'] == '0':
-            details['Last Post Recent']='Null'
-            print('Is Last Post Recent:-\t',details['Last Post Recent'])
-        else :
-            timestamp = int(user['edge_owner_to_timeline_media']['edges'][0]['node']['taken_at_timestamp'])
-            if datetime.datetime.today() - datetime.datetime.strptime(get_time(timestamp), '%m/%d/%y %H:%M:%S') < timedelta(days=180):
-                details['Last Post Recent']='1'
-            else:
-                details['Last Post Recent']='0'
-            print('Is Last Post Recent:-\t',details['Last Post Recent'])
-    else:
-        details['Last Post Recent']='Null'
-        print('Is Last Post Recent:-\t',details['Last Post Recent'])
 
     details['Fake'] = '1'
     print('Is Fake:-\t\t', details['Fake'])
