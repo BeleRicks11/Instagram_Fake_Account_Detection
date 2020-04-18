@@ -40,7 +40,9 @@
    **Insta Fake Account Detection** is Machine Learning Project developed for the *Big Data and Business Intelligence* course of [@Università di Parma].
    The objective of this project is the automated recognition of fake Instagram accounts, using some *Classification Algorithms*. 
    
-   The projects has 2 dataset: the first with 11 feature is used for the recognition of private accounts, which due to their privacy have a limited amount of informations to share, the second with 14 features is used with the public accounts, which thanks to their privacy have more informations to work with, such as the date of the post published, which gave the algorithms some informations about the index of activity of the account. Every account's feature has been scraped using an Instagram Web Scraper.
+   The projects has 2 dataset: the first with 11 feature is used for the recognition of private accounts, which due to their privacy have a limited amount of informations to share, the second with 14 features is used with the public accounts, which thanks to their privacy have more informations to work with, such as the date of the post published, which gave the algorithms some informations about the index of activity of the account. 
+   
+   Every account's feature has been scraped using an Instagram Web Scraper.
 
    Then the two dataset have been subject to a *Preprocessing Phase*. This phase consists of the *standardization* and the *normalization* of the two datasets. In this have been done the [_Feature Importance Forest of Trees_] and the [_Feature Selection_] analysis. In the Feature Selection has been used four algorithms:
    + L1 Based
@@ -88,7 +90,7 @@
    <!-- DATASETS -->
    ## 🗂 DATASETS
    Is possible to find the datasets in the [_resources_] folder.
-   
+
    ### Dataset for Private Accounts
    Profile Pic   |  Nums / Length Username  |  Full Name Words  |  Bio Length  |  External URL  |  Is Private  |  Is Verified  |  Is Business  |  # Post  |  # Followers  |  # Following
    :------------:|:------------------------:|:-----------------:|:------------:|:--------------:|:------------:|:-------------:|:-----------:|:--------:|:-------------:|:------------:|
@@ -118,7 +120,7 @@
    ## 📊 CLASSIFICATION REPORT
 
    ### Report for Private Accounts
-   <p align="center">
+   <center>
 
    |        *Algorithm*          |  *Accuracy*  |  *Precision*  |  *Recall*  |  *F-Score*  |
    |:---------------------------:|:------------:|:-------------:|:----------:|:-----------:|
@@ -130,11 +132,11 @@
    |  Random Forest              |      94%     |      94%      |     94%    |     94%     |
    |  SGD Classifier             |      95%     |      95%      |     95%    |     95%     |
    |  SVM Classifier             |      94%     |      94%      |     94%    |     94%     | 
-
-   </p>
+   
+   </center>
 
    ### Report for Public Accounts
-   <p align="center">
+   <center>
 
    |        *Algorithm*          |  *Accuracy*  |  *Precision*  |  *Recall*  |  *F-Score*  |
    |:---------------------------:|:------------:|:-------------:|:----------:|:-----------:|
@@ -146,8 +148,8 @@
    |  **Random Forest**          |      98%     |      99%      |     98%    |     98%     |
    |  SGD Classifier             |      95%     |      95%      |     95%    |     95%     |
    |  SVM Classifier             |      95%     |      95%      |     95%    |     95%     |
-   
-   </p>
+
+   </center>
    
    <!-- LICENSE -->
    ## 🔑 LICENSE
